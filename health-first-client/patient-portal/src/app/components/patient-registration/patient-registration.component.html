@@ -1,0 +1,434 @@
+<div class="registration-container">
+  <div class="registration-card">
+    <header class="registration-header">
+      <h1 class="registration-title">Patient Registration</h1>
+      <p class="registration-subtitle">Create your account to access health services</p>
+    </header>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form" novalidate>
+      
+      <!-- Personal Information Section -->
+      <section class="form-section" aria-labelledby="personal-info-heading">
+        <h2 id="personal-info-heading" class="section-title">
+          <span class="section-icon">👤</span>
+          Personal Information
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="first_name" class="form-label">
+              First Name <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="first_name"
+              formControlName="first_name"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('first_name')"
+              placeholder="Enter your first name"
+              aria-describedby="first_name-error"
+              maxlength="50"
+            >
+            <div id="first_name-error" class="error-message" *ngIf="isFieldInvalid('first_name')">
+              {{ getErrorMessage('first_name') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="last_name" class="form-label">
+              Last Name <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="last_name"
+              formControlName="last_name"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('last_name')"
+              placeholder="Enter your last name"
+              aria-describedby="last_name-error"
+              maxlength="50"
+            >
+            <div id="last_name-error" class="error-message" *ngIf="isFieldInvalid('last_name')">
+              {{ getErrorMessage('last_name') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">
+              Email Address <span class="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('email')"
+              placeholder="Enter your email address"
+              aria-describedby="email-error"
+            >
+            <div id="email-error" class="error-message" *ngIf="isFieldInvalid('email')">
+              {{ getErrorMessage('email') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone_number" class="form-label">
+              Phone Number <span class="required">*</span>
+            </label>
+            <input
+              type="tel"
+              id="phone_number"
+              formControlName="phone_number"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('phone_number')"
+              placeholder="(555) 123-4567"
+              aria-describedby="phone_number-error"
+              (input)="formatPhoneNumber($event)"
+            >
+            <div id="phone_number-error" class="error-message" *ngIf="isFieldInvalid('phone_number')">
+              {{ getErrorMessage('phone_number') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="date_of_birth" class="form-label">
+              Date of Birth <span class="required">*</span>
+            </label>
+            <input
+              type="date"
+              id="date_of_birth"
+              formControlName="date_of_birth"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('date_of_birth')"
+              aria-describedby="date_of_birth-error"
+              max="{{ maxDate }}"
+            >
+            <div id="date_of_birth-error" class="error-message" *ngIf="isFieldInvalid('date_of_birth')">
+              {{ getErrorMessage('date_of_birth') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender" class="form-label">
+              Gender <span class="required">*</span>
+            </label>AppComponent
+            <select
+              id="gender"
+              formControlName="gender"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('gender')"
+              aria-describedby="gender-error"
+            >
+              <option value="">Select gender</option>
+              <option *ngFor="let option of genderOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+            <div id="gender-error" class="error-message" *ngIf="isFieldInvalid('gender')">
+              {{ getErrorMessage('gender') }}
+            </div>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="password" class="form-label">
+              Password <span class="required">*</span>
+            </label>
+            <div class="password-input-container">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="form-control"
+                [class.invalid]="isFieldInvalid('password')"
+                placeholder="Create a strong password"
+                aria-describedby="password-error password-strength"
+              >
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              >
+                <span class="password-icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+              </button>
+            </div>
+            <div id="password-strength" class="password-strength" *ngIf="registrationForm.get('password')?.value">
+              <div class="strength-bar">
+                <div class="strength-fill" [style.width.%]="passwordStrength.score * 20" [style.background-color]="passwordStrength.color"></div>
+              </div>
+              <span class="strength-text" [style.color]="passwordStrength.color">{{ passwordStrength.message }}</span>
+            </div>
+            <div id="password-error" class="error-message" *ngIf="isFieldInvalid('password')">
+              {{ getErrorMessage('password') }}
+            </div>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="confirm_password" class="form-label">
+              Confirm Password <span class="required">*</span>
+            </label>
+            <div class="password-input-container">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirm_password"
+                formControlName="confirm_password"
+                class="form-control"
+                [class.invalid]="isFieldInvalid('confirm_password')"
+                placeholder="Confirm your password"
+                aria-describedby="confirm_password-error"
+              >
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleConfirmPasswordVisibility()"
+                [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+              >
+                <span class="password-icon">{{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}</span>
+              </button>
+            </div>
+            <div id="confirm_password-error" class="error-message" *ngIf="isFieldInvalid('confirm_password')">
+              {{ getErrorMessage('confirm_password') }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Address Section -->
+      <section class="form-section" aria-labelledby="address-heading">
+        <h2 id="address-heading" class="section-title">
+          <span class="section-icon">📍</span>
+          Address Information
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="street" class="form-label">
+              Street Address <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="street"
+              formControlName="street"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('street')"
+              placeholder="Enter your street address"
+              aria-describedby="street-error"
+              maxlength="200"
+            >
+            <div id="street-error" class="error-message" *ngIf="isFieldInvalid('street')">
+              {{ getErrorMessage('street') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="city" class="form-label">
+              City <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="city"
+              formControlName="city"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('city')"
+              placeholder="Enter your city"
+              aria-describedby="city-error"
+              maxlength="100"
+            >
+            <div id="city-error" class="error-message" *ngIf="isFieldInvalid('city')">
+              {{ getErrorMessage('city') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="state" class="form-label">
+              State <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="state"
+              formControlName="state"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('state')"
+              placeholder="Enter your state"
+              aria-describedby="state-error"
+              maxlength="50"
+            >
+            <div id="state-error" class="error-message" *ngIf="isFieldInvalid('state')">
+              {{ getErrorMessage('state') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="zip" class="form-label">
+              ZIP Code <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="zip"
+              formControlName="zip"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('zip')"
+              placeholder="12345 or 12345-6789"
+              aria-describedby="zip-error"
+              (input)="formatZipCode($event)"
+            >
+            <div id="zip-error" class="error-message" *ngIf="isFieldInvalid('zip')">
+              {{ getErrorMessage('zip') }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Emergency Contact Section -->
+      <section class="form-section" aria-labelledby="emergency-heading">
+        <h2 id="emergency-heading" class="section-title">
+          <span class="section-icon">🚨</span>
+          Emergency Contact (Optional)
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="emergency_contact_name" class="form-label">
+              Emergency Contact Name
+            </label>
+            <input
+              type="text"
+              id="emergency_contact_name"
+              formControlName="emergency_contact_name"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('emergency_contact_name')"
+              placeholder="Enter emergency contact name"
+              aria-describedby="emergency_contact_name-error"
+              maxlength="100"
+            >
+            <div id="emergency_contact_name-error" class="error-message" *ngIf="isFieldInvalid('emergency_contact_name')">
+              {{ getErrorMessage('emergency_contact_name') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="emergency_contact_phone" class="form-label">
+              Emergency Contact Phone
+            </label>
+            <input
+              type="tel"
+              id="emergency_contact_phone"
+              formControlName="emergency_contact_phone"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('emergency_contact_phone')"
+              placeholder="(555) 123-4567"
+              aria-describedby="emergency_contact_phone-error"
+              (input)="formatPhoneNumber($event)"
+            >
+            <div id="emergency_contact_phone-error" class="error-message" *ngIf="isFieldInvalid('emergency_contact_phone')">
+              {{ getErrorMessage('emergency_contact_phone') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="emergency_contact_relationship" class="form-label">
+              Relationship
+            </label>
+            <input
+              type="text"
+              id="emergency_contact_relationship"
+              formControlName="emergency_contact_relationship"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('emergency_contact_relationship')"
+              placeholder="e.g., Spouse, Parent, Friend"
+              aria-describedby="emergency_contact_relationship-error"
+              maxlength="50"
+            >
+            <div id="emergency_contact_relationship-error" class="error-message" *ngIf="isFieldInvalid('emergency_contact_relationship')">
+              {{ getErrorMessage('emergency_contact_relationship') }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Insurance Information Section -->
+      <section class="form-section" aria-labelledby="insurance-heading">
+        <h2 id="insurance-heading" class="section-title">
+          <span class="section-icon">🏥</span>
+          Insurance Information (Optional)
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="insurance_provider" class="form-label">
+              Insurance Provider
+            </label>
+            <input
+              type="text"
+              id="insurance_provider"
+              formControlName="insurance_provider"
+              class="form-control"
+              placeholder="Enter insurance provider name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="insurance_policy_number" class="form-label">
+              Policy Number
+            </label>
+            <input
+              type="text"
+              id="insurance_policy_number"
+              formControlName="insurance_policy_number"
+              class="form-control"
+              placeholder="Enter policy number"
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Medical History Section -->
+      <section class="form-section" aria-labelledby="medical-heading">
+        <h2 id="medical-heading" class="section-title">
+          <span class="section-icon">📋</span>
+          Medical History (Optional)
+        </h2>
+        
+        <div class="form-group">
+          <label for="medical_history" class="form-label">
+            Medical Conditions
+          </label>
+          <textarea
+            id="medical_history"
+            formControlName="medical_history"
+            class="form-control"
+            rows="4"
+            placeholder="Please list any relevant medical conditions, allergies, or medications (separated by commas)"
+            aria-describedby="medical_history-help"
+          ></textarea>
+          <div id="medical_history-help" class="help-text">
+            This information helps us provide better care. All information is kept confidential.
+          </div>
+        </div>
+      </section>
+
+      <!-- Submit Section -->
+      <section class="form-section submit-section">
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="registrationForm.invalid || isSubmitting"
+            [attr.aria-busy]="isSubmitting"
+          >
+            <span *ngIf="!isSubmitting">Create Account</span>
+            <span *ngIf="isSubmitting" class="loading-spinner">Creating Account...</span>
+          </button>
+        </div>
+        
+        <div class="form-disclaimer">
+          <p>
+            By creating an account, you agree to our 
+            <a href="#" class="link">Terms of Service</a> and 
+            <a href="#" class="link">Privacy Policy</a>.
+          </p>
+        </div>
+      </section>
+    </form>
+  </div>
+</div> 

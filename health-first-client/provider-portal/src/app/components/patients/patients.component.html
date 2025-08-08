@@ -1,0 +1,61 @@
+<div class="patients">
+  <div class="patients-header">
+    <h1>Patients</h1>
+    <p>View and manage your patient information.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading patients...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage" class="patients-content">
+    <div class="patients-list">
+      <div *ngFor="let patient of patients" class="patient-card">
+        <div class="patient-header">
+          <div class="patient-avatar">
+            {{ patient.first_name.charAt(0) }}{{ patient.last_name.charAt(0) }}
+          </div>
+          <div class="patient-info">
+            <h3>{{ patient.first_name }} {{ patient.last_name }}</h3>
+            <p>{{ patient.email }} | {{ patient.phone_number }}</p>
+          </div>
+        </div>
+
+        <div class="patient-details">
+          <div class="detail-item">
+            <span class="detail-label">Date of Birth:</span>
+            <span class="detail-value">{{ formatDate(patient.date_of_birth) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Gender:</span>
+            <span class="detail-value">{{ patient.gender | titlecase }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Address:</span>
+            <span class="detail-value">
+              {{ patient.address.street }}, {{ patient.address.city }}, {{ patient.address.state }} {{ patient.address.zip }}
+            </span>
+          </div>
+          <div *ngIf="patient.insurance_provider" class="detail-item">
+            <span class="detail-label">Insurance:</span>
+            <span class="detail-value">{{ patient.insurance_provider }}</span>
+          </div>
+          <div *ngIf="patient.emergency_contact" class="detail-item">
+            <span class="detail-label">Emergency Contact:</span>
+            <span class="detail-value">
+              {{ patient.emergency_contact.name }} ({{ patient.emergency_contact.phone }}) - {{ patient.emergency_contact.relationship }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="patients.length === 0" class="no-patients">
+        <p>No patients found.</p>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,122 @@
+<div class="appointments">
+  <div class="appointments-header">
+    <h1>Appointments</h1>
+    <p>Manage your patient appointments and schedules.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading appointments...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage" class="appointments-content">
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-group">
+        <label for="status-filter" class="form-label">Status</label>
+        <select 
+          id="status-filter" 
+          [(ngModel)]="selectedStatus" 
+          (change)="onStatusChange()"
+          class="form-control"
+        >
+          <option value="all">All Statuses</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="no_show">No Show</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="date-filter" class="form-label">Date</label>
+        <input 
+          type="date" 
+          id="date-filter" 
+          [(ngModel)]="selectedDate" 
+          (change)="onDateChange()"
+          class="form-control"
+        >
+      </div>
+    </div>
+
+    <!-- Appointments List -->
+    <div class="appointments-list">
+      <div *ngFor="let appointment of appointments" class="appointment-card">
+        <div class="appointment-header">
+          <div class="patient-info">
+            <h3>{{ appointment.patient_name }}</h3>
+            <p>{{ appointment.patient_email }} | {{ appointment.patient_phone }}</p>
+          </div>
+          <div class="appointment-status">
+            <span [class]="'status-badge ' + getStatusClass(appointment.status)">
+              {{ appointment.status | titlecase }}
+            </span>
+          </div>
+        </div>
+
+        <div class="appointment-details">
+          <div class="detail-item">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">{{ formatDate(appointment.appointment_date) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Time:</span>
+            <span class="detail-value">{{ formatTime(appointment.appointment_time) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Duration:</span>
+            <span class="detail-value">{{ appointment.duration }} minutes</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Reason:</span>
+            <span class="detail-value">{{ appointment.reason }}</span>
+          </div>
+          <div *ngIf="appointment.notes" class="detail-item">
+            <span class="detail-label">Notes:</span>
+            <span class="detail-value">{{ appointment.notes }}</span>
+          </div>
+        </div>
+
+        <div class="appointment-actions">
+          <button 
+            *ngIf="appointment.status === 'scheduled'"
+            (click)="updateAppointmentStatus(appointment.id, 'confirmed')"
+            class="btn btn-primary"
+          >
+            Confirm
+          </button>
+          <button 
+            *ngIf="appointment.status === 'confirmed'"
+            (click)="updateAppointmentStatus(appointment.id, 'completed')"
+            class="btn btn-primary"
+          >
+            Mark Complete
+          </button>
+          <button 
+            *ngIf="appointment.status === 'scheduled' || appointment.status === 'confirmed'"
+            (click)="updateAppointmentStatus(appointment.id, 'cancelled')"
+            class="btn btn-secondary"
+          >
+            Cancel
+          </button>
+          <button 
+            *ngIf="appointment.status === 'confirmed'"
+            (click)="updateAppointmentStatus(appointment.id, 'no_show')"
+            class="btn btn-secondary"
+          >
+            No Show
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="appointments.length === 0" class="no-appointments">
+        <p>No appointments found for the selected criteria.</p>
+      </div>
+    </div>
+  </div>
+</div> 

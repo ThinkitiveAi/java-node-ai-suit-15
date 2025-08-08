@@ -1,0 +1,133 @@
+.patients {
+  padding: 2rem 0;
+}
+
+.patients-header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #64748b;
+    font-size: 1.125rem;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+.patients-content {
+  .patients-list {
+    display: grid;
+    gap: 1.5rem;
+    
+    .patient-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border-left: 4px solid #3b82f6;
+      
+      .patient-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        
+        .patient-avatar {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: 600;
+          font-size: 1.25rem;
+        }
+        
+        .patient-info {
+          h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 0.25rem 0;
+          }
+          
+          p {
+            color: #64748b;
+            margin: 0;
+          }
+        }
+      }
+      
+      .patient-details {
+        .detail-item {
+          display: flex;
+          margin-bottom: 0.75rem;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+          
+          .detail-label {
+            font-weight: 500;
+            color: #374151;
+            min-width: 140px;
+          }
+          
+          .detail-value {
+            color: #1e293b;
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.no-patients {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+  .patients-content {
+    .patients-list {
+      .patient-card {
+        .patient-header {
+          flex-direction: column;
+          text-align: center;
+          
+          .patient-avatar {
+            margin-bottom: 0.5rem;
+          }
+        }
+        
+        .patient-details {
+          .detail-item {
+            flex-direction: column;
+            gap: 0.25rem;
+            
+            .detail-label {
+              min-width: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+} 

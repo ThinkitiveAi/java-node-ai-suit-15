@@ -1,0 +1,33 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>Health First</h1>
+          <span class="subtitle">Provider Portal</span>
+        </div>
+        <nav class="main-nav">
+          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/appointments" routerLinkActive="active">Appointments</a>
+          <a routerLink="/patients" routerLinkActive="active">Patients</a>
+          <a routerLink="/profile" routerLinkActive="active">Profile</a>
+        </nav>
+        <div class="user-menu">
+          <button class="btn btn-secondary">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container">
+      <p>&copy; 2024 Health First. All rights reserved.</p>
+    </div>
+  </footer>
+</div> 

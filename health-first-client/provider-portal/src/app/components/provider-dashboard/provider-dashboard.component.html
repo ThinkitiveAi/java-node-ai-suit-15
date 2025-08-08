@@ -1,0 +1,78 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>Provider Dashboard</h1>
+    <p>Welcome back! Here's an overview of your practice.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="dashboardData && !isLoading" class="dashboard-content">
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <h3>{{ dashboardData.total_patients }}</h3>
+          <p>Total Patients</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <h3>{{ dashboardData.appointments_today }}</h3>
+          <p>Appointments Today</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-content">
+          <h3>{{ dashboardData.pending_appointments }}</h3>
+          <p>Pending Appointments</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <h3>{{ dashboardData.completed_appointments }}</h3>
+          <p>Completed Appointments</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>${{ dashboardData.revenue_this_month | number:'1.0-0' }}</h3>
+          <p>Revenue This Month</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="activities-section">
+      <h2>Recent Activities</h2>
+      <div class="activities-list">
+        <div *ngFor="let activity of dashboardData.recent_activities" class="activity-item">
+          <div class="activity-icon">
+            {{ getActivityIcon(activity.type) }}
+          </div>
+          <div class="activity-content">
+            <p class="activity-description">{{ activity.description }}</p>
+            <p class="activity-time">{{ formatDate(activity.timestamp) }}</p>
+          </div>
+          <div *ngIf="activity.amount" class="activity-amount">
+            ${{ activity.amount | number:'1.0-2' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

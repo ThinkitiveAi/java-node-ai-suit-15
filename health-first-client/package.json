@@ -1,0 +1,30 @@
+{
+  "name": "health-first-client",
+  "version": "1.0.0",
+  "description": "Health First Healthcare Management System - Patient and Provider Portals",
+  "scripts": {
+    "install:patient": "cd patient-portal/patient-registration && npm install",
+    "install:provider": "cd provider-portal && npm install",
+    "install:all": "npm run install:patient && npm run install:provider",
+    "start:patient": "cd patient-portal/patient-registration && npm start",
+    "start:provider": "cd provider-portal && npm start",
+    "build:patient": "cd patient-portal/patient-registration && npm run build",
+    "build:provider": "cd provider-portal && npm run build",
+    "build:all": "npm run build:patient && npm run build:provider",
+    "test:patient": "cd patient-portal/patient-registration && npm test",
+    "test:provider": "cd provider-portal && npm test",
+    "test:all": "npm run test:patient && npm run test:provider"
+  },
+  "keywords": [
+    "healthcare",
+    "angular",
+    "patient-portal",
+    "provider-portal",
+    "health-management"
+  ],
+  "author": "Health First Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@angular/cli": "~11.2.14"
+  }
+} 
